@@ -1,4 +1,2 @@
 python-telegram-bot
 requests
-
-pip freeze > requirements.txt
