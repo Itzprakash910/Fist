@@ -143,6 +143,23 @@ async def search_movie(update: Update, context):
         )
     else:
         await update.message.reply_text("❌ *Movie nahi mili!*", parse_mode="Markdown")
+        
+        # ✅ Latest Movies Function
+async def latest_movies(update: Update, context):
+    movies = load_movies()
+    if not movies:
+        await update.callback_query.message.reply_text("❌ कोई लेटेस्ट मूवी उपलब्ध नहीं है!", parse_mode="Markdown")
+        return
+
+    latest_movies = movies[-5:]  # आखिरी 5 मूवी दिखाएगा (आप इसे बदल सकते हैं)
+    buttons = [[InlineKeyboardButton(m["name"], callback_data=f"movie_{m['name']}")] for m in latest_movies]
+    reply_markup = InlineKeyboardMarkup(buttons)
+
+    await update.callback_query.message.reply_text(
+        "🔥 *लेटेस्ट मूवीज़:*",
+        reply_markup=reply_markup,
+        parse_mode="Markdown"
+    )
 
 # ✅ Button Click Handling
 async def button_click(update: Update, context):
@@ -151,6 +168,8 @@ async def button_click(update: Update, context):
 
     if query.data == "movie_list":
         await show_movie_names(update, context)
+    elif query.data == "latest_movies":  # ✅ यह लाइन जोड़ी गई है
+        await latest_movies(update, context)
     elif query.data.startswith("movie_"):
         await show_movie_details(update, context)
     elif query.data == "search":
