@@ -4,7 +4,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
 # ✅ Bot Token & Configurations
-TOKEN = "7880903198:AAE9L8v6vbbpLSi_M-6ZqsH38hC608glYz8"  # अपना बोट टोकन यहाँ डालें
+TOKEN = "8125453394:AAEDSmpVpwgKThrjzvaGFmGF1mx-hpVbBLk"  # अपना बोट टोकन यहाँ डालें
 MOVIE_DB = "movies.json"
 ADMIN_ID = 6221923358  # अपना टेलीग्राम ID सेट करें
 CHANNEL_ID = "@movie_realised"  # अपना चैनल ID सेट करें
