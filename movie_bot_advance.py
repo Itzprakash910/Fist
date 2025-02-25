@@ -1,10 +1,11 @@
 import json
 import logging
+import asyncio
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
 # ✅ Bot Token & Configurations
-TOKEN = "7880903198:AAE9L8v6vbbpLSi_M-6ZqsH38hC608glYz8"  # अपना बोट टोकन यहाँ डालें
+TOKEN = "8125453394:AAEDSmpVpwgKThrjzvaGFmGF1mx-hpVbBLk"  # अपना बॉट टोकन डालें
 MOVIE_DB = "movies.json"
 ADMIN_ID = 6221923358  # अपना टेलीग्राम ID सेट करें
 CHANNEL_ID = "@movie_realised"  # अपना चैनल ID सेट करें
@@ -62,6 +63,22 @@ async def add_movies(update: Update, context):
         save_movies(movies)
         await update.message.reply_text(f"✅ *Movies Added:*\n🎬 " + "\n🎬 ".join(added_movies), parse_mode="Markdown")
         
+        # ✅ New Feature: Show movie in bot for 10s before list update
+        for movie in added_movies:
+            keyboard = [[InlineKeyboardButton("🔗 Watch Now", url=movies[-1]["link"])]]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+
+            msg = await update.message.reply_photo(
+                photo=movies[-1]["poster"],
+                caption=f"🎬 *New Movie Added!*\n🔥 {movies[-1]['name']}",
+                reply_markup=reply_markup,
+                parse_mode="Markdown"
+            )
+
+            # ✅ Wait for 10 seconds
+            await asyncio.sleep(10)
+            await msg.delete()
+
         # ✅ Notify Users
         notification_text = "🎥 *New Movies Added!*\n\n" + "\n".join([f"🎬 {m}" for m in added_movies])
         await context.bot.send_message(chat_id=CHANNEL_ID, text=notification_text, parse_mode="Markdown")
@@ -126,41 +143,6 @@ async def show_movie_details(update: Update, context):
         parse_mode="Markdown"
     )
 
-# ✅ Search Movie Feature (With Clickable Buttons)
-async def search_movie(update: Update, context):
-    query = " ".join(context.args).lower()
-    movies = load_movies()
-    results = [m for m in movies if query in m["name"].lower()]
-
-    if results:
-        buttons = [[InlineKeyboardButton(m["name"], callback_data=f"movie_{m['name']}")] for m in results]
-        reply_markup = InlineKeyboardMarkup(buttons)
-
-        await update.message.reply_text(
-            "🔎 *Search Results:*",
-            reply_markup=reply_markup,
-            parse_mode="Markdown"
-        )
-    else:
-        await update.message.reply_text("❌ *Movie nahi mili!*", parse_mode="Markdown")
-        
-        # ✅ Latest Movies Function
-async def latest_movies(update: Update, context):
-    movies = load_movies()
-    if not movies:
-        await update.callback_query.message.reply_text("❌ कोई लेटेस्ट मूवी उपलब्ध नहीं है!", parse_mode="Markdown")
-        return
-
-    latest_movies = movies[-5:]  # आखिरी 5 मूवी दिखाएगा (आप इसे बदल सकते हैं)
-    buttons = [[InlineKeyboardButton(m["name"], callback_data=f"movie_{m['name']}")] for m in latest_movies]
-    reply_markup = InlineKeyboardMarkup(buttons)
-
-    await update.callback_query.message.reply_text(
-        "🔥 *लेटेस्ट मूवीज़:*",
-        reply_markup=reply_markup,
-        parse_mode="Markdown"
-    )
-
 # ✅ Button Click Handling
 async def button_click(update: Update, context):
     query = update.callback_query
@@ -168,8 +150,6 @@ async def button_click(update: Update, context):
 
     if query.data == "movie_list":
         await show_movie_names(update, context)
-    elif query.data == "latest_movies":  # ✅ यह लाइन जोड़ी गई है
-        await latest_movies(update, context)
     elif query.data.startswith("movie_"):
         await show_movie_details(update, context)
     elif query.data == "search":
@@ -190,7 +170,6 @@ def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("add_movies", add_movies))
     app.add_handler(CommandHandler("delete_movie", delete_movie))
-    app.add_handler(CommandHandler("search", search_movie))
     app.add_handler(CallbackQueryHandler(button_click))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, block_user_messages))
 
