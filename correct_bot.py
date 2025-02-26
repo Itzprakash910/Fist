@@ -4,10 +4,10 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
 # ✅ Bot Token & Configurations
-TOKEN = ["8125453394:AAEDSmpVpwgKThrjzvaGFmGF1mx-hpVbBLk","7348893495:AAEyPcdCEhgZPI8FmKNBlgAQjMVj-na0fhA"] # अपना बोट टोकन यहाँ डालें
+TOKEN = "8125453394:AAEDSmpVpwgKThrjzvaGFmGF1mx-hpVbBLk"
 MOVIE_DB = "movies.json"
-ADMIN_ID = 6221923358  # अपना टेलीग्राम ID सेट करें
-CHANNEL_ID = ["@movie_realised","@new_realise_movie_2025"]  # अपना चैनल ID सेट करें
+ADMIN_ID = [6221923358]  # List of Admins
+CHANNEL_ID = ["@movie_realised", "@new_realise_movie_2025"]  # Channel List
 
 logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
@@ -43,7 +43,7 @@ async def start(update: Update, context):
 # ✅ Add Movies (Admin Only)
 async def add_movies(update: Update, context):
     user_id = update.message.from_user.id
-    if user_id != ADMIN_ID:
+    if user_id not in ADMIN_ID:
         await update.message.reply_text("🚫 Aapke paas permission nahi hai!", parse_mode="Markdown")
         return
 
@@ -63,23 +63,29 @@ async def add_movies(update: Update, context):
         await update.message.reply_text(f"✅ *Movies Added:*\n🎬 " + "\n🎬 ".join(added_movies), parse_mode="Markdown")
         
         # ✅ Notify Users
-        notification_text = "🎥 *New Movies Added '@LatestUpdate_bot'!*\n\n" + "\n".join([f"🎬 {m}" for m in added_movies])
-        await context.bot.send_message(chat_id=CHANNEL_ID, text=notification_text, parse_mode="Markdown")
+        notification_text = "🎥 *New Movies Added! @LatestUpdate_bot ♥️*\n\n" + "\n".join([f"🎬 {m}" for m in added_movies])
+        for channel in CHANNEL_ID:
+            await context.bot.send_message(chat_id=channel, text=notification_text, parse_mode="Markdown")
     else:
         await update.message.reply_text("⚠️ *Format:* `/add_movies`\nMovie1 | Poster_URL1 | Link1\nMovie2 | Poster_URL2 | Link2", parse_mode="Markdown")
 
 # ✅ Delete Movie (Admin Only)
 async def delete_movie(update: Update, context):
     user_id = update.message.from_user.id
-    if user_id != ADMIN_ID:
+    if user_id not in ADMIN_ID:
         await update.message.reply_text("🚫 Aapke paas permission nahi hai!", parse_mode="Markdown")
         return
 
     try:
         movie_name = " ".join(context.args)
         movies = load_movies()
-        movies = [m for m in movies if m["name"].lower() != movie_name.lower()]
-        save_movies(movies)
+        new_movies = [m for m in movies if m["name"].lower() != movie_name.lower()]
+        
+        if len(movies) == len(new_movies):
+            await update.message.reply_text(f"❌ *Movie '{movie_name}' nahi mili!*", parse_mode="Markdown")
+            return
+        
+        save_movies(new_movies)
         await update.message.reply_text(f"✅ *Movie deleted:* {movie_name}", parse_mode="Markdown")
     except:
         await update.message.reply_text("⚠️ *Format:* `/delete_movie MovieName`", parse_mode="Markdown")
@@ -91,18 +97,9 @@ async def show_movie_names(update: Update, context):
         await update.callback_query.message.reply_text("❌ Koi movies available nahi hain!", parse_mode="Markdown")
         return
 
-    buttons = []
-    row = []
-    for movie in movies:
-        row.append(InlineKeyboardButton(movie["name"], callback_data=f"movie_{movie['name']}"))
-        if len(row) == 2:
-            buttons.append(row)
-            row = []
-    
-    if row:
-        buttons.append(row)
-
+    buttons = [[InlineKeyboardButton(m["name"], callback_data=f"movie_{m['name']}")] for m in movies]
     reply_markup = InlineKeyboardMarkup(buttons)
+
     await update.callback_query.message.reply_text("🎬 *Movie List:*", reply_markup=reply_markup, parse_mode="Markdown")
 
 # ✅ Show Movie Details
@@ -126,7 +123,7 @@ async def show_movie_details(update: Update, context):
         parse_mode="Markdown"
     )
 
-# ✅ Search Movie Feature (With Clickable Buttons)
+# ✅ Search Movie Feature
 async def search_movie(update: Update, context):
     query = " ".join(context.args).lower()
     movies = load_movies()
@@ -136,30 +133,22 @@ async def search_movie(update: Update, context):
         buttons = [[InlineKeyboardButton(m["name"], callback_data=f"movie_{m['name']}")] for m in results]
         reply_markup = InlineKeyboardMarkup(buttons)
 
-        await update.message.reply_text(
-            "🔎 *Search Results:*",
-            reply_markup=reply_markup,
-            parse_mode="Markdown"
-        )
+        await update.message.reply_text("🔎 *Search Results:*", reply_markup=reply_markup, parse_mode="Markdown")
     else:
         await update.message.reply_text("❌ *Movie nahi mili!*", parse_mode="Markdown")
-        
-        # ✅ Latest Movies Function
+
+# ✅ Latest Movies
 async def latest_movies(update: Update, context):
     movies = load_movies()
     if not movies:
         await update.callback_query.message.reply_text("❌ कोई लेटेस्ट मूवी उपलब्ध नहीं है!", parse_mode="Markdown")
         return
 
-    latest_movies = movies[-6:]  # आखिरी 5 मूवी दिखाएगा (आप इसे बदल सकते हैं)
+    latest_movies = movies[-6:]  
     buttons = [[InlineKeyboardButton(m["name"], callback_data=f"movie_{m['name']}")] for m in latest_movies]
     reply_markup = InlineKeyboardMarkup(buttons)
 
-    await update.callback_query.message.reply_text(
-        "🔥 *लेटेस्ट मूवीज़:*",
-        reply_markup=reply_markup,
-        parse_mode="Markdown"
-    )
+    await update.callback_query.message.reply_text("🔥 *लेटेस्ट मूवीज़:*", reply_markup=reply_markup, parse_mode="Markdown")
 
 # ✅ Button Click Handling
 async def button_click(update: Update, context):
@@ -168,7 +157,7 @@ async def button_click(update: Update, context):
 
     if query.data == "movie_list":
         await show_movie_names(update, context)
-    elif query.data == "latest_movies":  # ✅ यह लाइन जोड़ी गई है
+    elif query.data == "latest_movies":
         await latest_movies(update, context)
     elif query.data.startswith("movie_"):
         await show_movie_details(update, context)
@@ -179,7 +168,7 @@ async def button_click(update: Update, context):
     elif query.data == "help":
         await query.message.reply_text("ℹ️ *Commands:*\n/search MovieName\n/add_movies\n/delete_movie Name", parse_mode="Markdown")
 
-# ✅ Block User Messages (Prevents Spam)
+# ✅ Block User Messages
 async def block_user_messages(update: Update, context):
     await update.message.delete()
 
