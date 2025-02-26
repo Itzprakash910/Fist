@@ -3,7 +3,7 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 import requests
 
 # 🔹 API KEYS
-BOT_TOKEN = "7880903198:AAGR2FEzVjDO6BP79_TzCXk0PJzZfI1owhU"
+BOT_TOKEN = "7880903198:AAGR2FEzVjDO6BP79_TzCXk0PJzZfI1owhU" 
 WEATHER_API_KEY = "7gtadAg0PNIUvsz8sFR2qQ1CwKzRSAkj"  # Tomorrow.io API Key
 
 # 🔹 Function to Get Current Weather (Tomorrow.io API)
