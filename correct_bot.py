@@ -63,7 +63,7 @@ async def add_movies(update: Update, context):
         await update.message.reply_text(f"✅ *Movies Added:*\n🎬 " + "\n🎬 ".join(added_movies), parse_mode="Markdown")
         
         # ✅ Notify Users
-        notification_text = "🎥 *New Movies Added!*\n\n" + "\n".join([f"🎬 {m}" for m in added_movies])
+        notification_text = "🎥 *New Movies Added '@LatestUpdate_bot'!*\n\n" + "\n".join([f"🎬 {m}" for m in added_movies])
         await context.bot.send_message(chat_id=CHANNEL_ID, text=notification_text, parse_mode="Markdown")
     else:
         await update.message.reply_text("⚠️ *Format:* `/add_movies`\nMovie1 | Poster_URL1 | Link1\nMovie2 | Poster_URL2 | Link2", parse_mode="Markdown")
