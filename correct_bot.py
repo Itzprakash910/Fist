@@ -7,7 +7,7 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Mess
 TOKEN = "8125453394:AAEDSmpVpwgKThrjzvaGFmGF1mx-hpVbBLk"  # अपना बोट टोकन यहाँ डालें
 MOVIE_DB = "movies.json"
 ADMIN_ID = 6221923358  # अपना टेलीग्राम ID सेट करें
-CHANNEL_ID = "@movie_realised"  # अपना चैनल ID सेट करें
+CHANNEL_ID = "@movie_realised , @Thara_Box_bot , @TheWeatheryX_bot ,@new_realise_movie_2025"  # अपना चैनल ID सेट करें
 
 logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
