@@ -4,7 +4,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
 # ✅ Bot Token & Configurations
-TOKEN = "8125453394:AAEDSmpVpwgKThrjzvaGFmGF1mx-hpVbBLk"  # अपना बोट टोकन यहाँ डालें
+TOKEN = ["8125453394:AAEDSmpVpwgKThrjzvaGFmGF1mx-hpVbBLk","7348893495:AAEyPcdCEhgZPI8FmKNBlgAQjMVj-na0fhA"] # अपना बोट टोकन यहाँ डालें
 MOVIE_DB = "movies.json"
 ADMIN_ID = 6221923358  # अपना टेलीग्राम ID सेट करें
 CHANNEL_ID = ["@movie_realised","@new_realise_movie_2025"]  # अपना चैनल ID सेट करें
@@ -151,7 +151,7 @@ async def latest_movies(update: Update, context):
         await update.callback_query.message.reply_text("❌ कोई लेटेस्ट मूवी उपलब्ध नहीं है!", parse_mode="Markdown")
         return
 
-    latest_movies = movies[-5:]  # आखिरी 5 मूवी दिखाएगा (आप इसे बदल सकते हैं)
+    latest_movies = movies[-6:]  # आखिरी 5 मूवी दिखाएगा (आप इसे बदल सकते हैं)
     buttons = [[InlineKeyboardButton(m["name"], callback_data=f"movie_{m['name']}")] for m in latest_movies]
     reply_markup = InlineKeyboardMarkup(buttons)
 
