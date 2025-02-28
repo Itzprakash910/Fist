@@ -5,7 +5,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
 # ✅ Bot Token & Configurations
-TOKEN = "8125453394:AAEDSmpVpwgKThrjzvaGFmGF1mx-hpVbBLk"  # ❌ Apne bot ka token yahan dalein (security ke liye hardcoded token hataya gaya)
+TOKEN =["7348893495:AAEyPcdCEhgZPI8FmKNBlgAQjMVj-na0fhA", "8125453394:AAEDSmpVpwgKThrjzvaGFmGF1mx-hpVbBLk"] # ❌ Apne bot ka token yahan dalein (security ke liye hardcoded token hataya gaya)
 MOVIE_DB = "movies.json"  # Movie database file
 ADMIN_ID = [6221923358]  # Admin ke Telegram ID list
 CHANNEL_ID = ["@movie_realised", "@new_realise_movie_2025"]  # Movie update channels
