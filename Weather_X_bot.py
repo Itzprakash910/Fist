@@ -1,6 +1,6 @@
 from telegram import Update, InlineKeyboardButton,  InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
-import requests
+import requests 
 
 # 🔹 API KEYS
 BOT_TOKEN = "7880903198:AAGR2FEzVjDO6BP79_TzCXk0PJzZfI1owhU" 
