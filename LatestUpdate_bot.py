@@ -58,7 +58,7 @@ async def return_to_main(update: Update, context):
     keyboard = [
         [InlineKeyboardButton("🎬 Movie List", callback_data='movie_list')],
         [InlineKeyboardButton("🔥 Latest Movies", callback_data='latest_movies')],
-        [InlineKeyboardButton("🔎 Search", callback_data='search')],
+        [InlineKeyboardButton("🔎 Search", callback_data='search_movie')],
         [InlineKeyboardButton("🔔 Set Reminder", callback_data='reminder')],
         [InlineKeyboardButton("ℹ️ Help", callback_data='help')],
     ]
@@ -226,7 +226,7 @@ async def button_click(update: Update, context):
     elif data == "latest_movies":
         await latest_movies(update, context)
     elif data == "search":
-        await search(update, context)
+        await search_movie(update, context)
     elif data == "help":
         await help(update, context)
     elif data.startswith("movie_"):
@@ -263,6 +263,7 @@ async def show_movie_details(update: Update, context, movie_name):
 async def run_bot(token):
     app = Application.builder().token(token).build()
     app.add_handler(CallbackQueryHandler(button_click))
+    app.add_handler(CommandHandler("search_movie", movie search))
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("add_movies", add_movies))
     app.add_handler(CommandHandler("delete_movie", delete_movie))
