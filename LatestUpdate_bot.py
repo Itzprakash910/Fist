@@ -263,7 +263,6 @@ async def show_movie_details(update: Update, context, movie_name):
 async def run_bot(token):
     app = Application.builder().token(token).build()
     app.add_handler(CallbackQueryHandler(button_click))
-    app.add_handler(CommandHandler("search_movie", movie search))
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("add_movies", add_movies))
     app.add_handler(CommandHandler("delete_movie", delete_movie))
