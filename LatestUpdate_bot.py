@@ -117,9 +117,24 @@ async def latest_movies(update: Update, context):
 
     await query.message.edit_text("🔥 *Latest Movies:*\n\nClick a movie to view details.", reply_markup=reply_markup, parse_mode="Markdown")
 
-# ✅ Search Movie Handler
-async def search(update: Update, context):
-    await update.callback_query.message.edit_text("🔎 *Search is coming soon...*", parse_mode="Markdown")
+# ✅ Search Movie Feature
+async def search_movie(update: Update, context):
+    """Movie search karne ki facility dega."""
+    if not context.args:
+        await update.message.reply_text("⚠️ *Format:* `/search MovieName`", parse_mode="Markdown")
+        return
+
+    query = " ".join(context.args).lower()
+    movies = load_movies()
+    results = [m for m in movies if query in m["name"].lower()]
+
+    if results:
+        buttons = [[InlineKeyboardButton(m["name"], callback_data=f"movie_{m['name']}")] for m in results]
+        reply_markup = InlineKeyboardMarkup(buttons)
+
+        await update.message.reply_text("🔎 *Search Results:*", reply_markup=reply_markup, parse_mode="Markdown")
+    else:
+        await update.message.reply_text("❌ *Movie nahi mili!*", parse_mode="Markdown")
 
 # ✅ Help Handler
 async def help(update: Update, context):
