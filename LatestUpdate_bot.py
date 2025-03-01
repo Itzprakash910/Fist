@@ -1,19 +1,19 @@
 import json
 import logging
 import asyncio
-import nest_asyncio
+#import nest_asyncio
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
 # ✅ Nest asyncio को enable करें (Pydroid3 के लिए जरूरी)
-nest_asyncio.apply()
+#nest_asyncio.apply()
 
 # ✅ Bot Token & Configurations
 TOKEN = [ "7348893495:AAEyPcdCEhgZPI8FmKNBlgAQjMVj-na0fhA", "8125453394:AAEDSmpVpwgKThrjzvaGFmGF1mx-hpVbBLk" ]  
 
 MOVIE_DB = "movies.json"  
 ADMIN_ID = [6221923358]  
-CHANNEL_ID = ["@movie_realised", "@new_realise_movie_2025"]  
+CHANNEL_ID = ["@Crezy_op","@chxnduuuframes","@movie_realised", "@new_realise_movie_2025"]  
 
 # ✅ Logging setup
 logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
