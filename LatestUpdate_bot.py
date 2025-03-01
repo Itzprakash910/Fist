@@ -127,7 +127,7 @@ async def search_movie(update: Update, context):
             return
         query = " ".join(context.args).lower()
     elif update.callback_query:  # ✅ अगर बटन के ज़रिए आया है
-        query = update.callback_query.data.replace("search_", "").lower()
+        query = update.callback_query.data.replace("search_movie", "").lower()
     else:
         return
 
