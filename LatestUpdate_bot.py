@@ -118,24 +118,29 @@ async def latest_movies(update: Update, context):
     await query.message.edit_text("🔥 *Latest Movies:*\n\nClick a movie to view details.", reply_markup=reply_markup, parse_mode="Markdown")
 
 # ✅ Search Movie Feature
+# ✅ Movie Search Feature (Fixed)
 async def search_movie(update: Update, context):
-    """Movie search karne ki facility dega."""
-    if not context.args:
-        await update.message.reply_text("⚠️ *Format:* `/search MovieName`", parse_mode="Markdown")
+    """Movies को सर्च करने का ऑप्शन देगा।"""
+    if update.message:  # ✅ अगर `/search` कमांड यूज़र ने टाइप की
+        if not context.args:
+            await update.message.reply_text("⚠️ *Usage:* `/search MovieName`", parse_mode="Markdown")
+            return
+        query = " ".join(context.args).lower()
+    elif update.callback_query:  # ✅ अगर बटन के ज़रिए आया है
+        query = update.callback_query.data.replace("search_", "").lower()
+    else:
         return
 
-    query = " ".join(context.args).lower()
     movies = load_movies()
     results = [m for m in movies if query in m["name"].lower()]
 
     if results:
         buttons = [[InlineKeyboardButton(m["name"], callback_data=f"movie_{m['name']}")] for m in results]
+        buttons.append([InlineKeyboardButton("🔙 Return", callback_data="return_to_main")])
         reply_markup = InlineKeyboardMarkup(buttons)
-
         await update.message.reply_text("🔎 *Search Results:*", reply_markup=reply_markup, parse_mode="Markdown")
     else:
-        await update.message.reply_text("❌ *Movie nahi mili!*", parse_mode="Markdown")
-
+        await update.message.reply_text(f"❌ *'{query}' से कोई मूवी नहीं मिली!*", parse_mode="Markdown")
 # ✅ Help Handler
 async def help(update: Update, context):
     help_text = "ℹ️ *Help Section*\n\n1️⃣ Use `/add_movies` to add movies.\n2️⃣ Use `/delete_movie` to remove movies.\n3️⃣ Click on buttons to navigate."
