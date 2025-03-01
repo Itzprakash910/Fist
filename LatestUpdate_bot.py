@@ -1,12 +1,12 @@
 import json
 import logging
 import asyncio
-#import nest_asyncio
+import nest_asyncio
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
 # ✅ Nest asyncio को enable करें (Pydroid3 के लिए जरूरी)
-#nest_asyncio.apply()
+nest_asyncio.apply()
 
 # ✅ Bot Token & Configurations
 TOKEN = [ "7348893495:AAEyPcdCEhgZPI8FmKNBlgAQjMVj-na0fhA", "8125453394:AAEDSmpVpwgKThrjzvaGFmGF1mx-hpVbBLk" ]  
@@ -260,7 +260,5 @@ async def main():
         await asyncio.gather(*tasks)
 
 if __name__ == "__main__":
-    asyncio.run(main())
-
-loop = asyncio.get_event_loop()
-loop.run_until_complete(application.run_polling())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
