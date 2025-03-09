@@ -9,7 +9,7 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Mess
 nest_asyncio.apply()
 
 # ✅ Bot Token & Configurations
-TOKEN = [ "7348893495:AAEyPcdCEhgZPI8FmKNBlgAQjMVj-na0fhA", "8125453394:AAGx4bC6ZRgKXdSXwm_VgbH1FLoRr8YBdo4" ]  
+TOKEN = ["7348893495:AAEyPcdCEhgZPI8FmKNBlgAQjMVj-na0fhA","8125453394:AAGx4bC6ZRgKXdSXwm_VgbH1FLoRr8YBdo4"]  
 
 MOVIE_DB = "movies.json"  
 ADMIN_ID = [6221923358]  
