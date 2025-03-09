@@ -12,7 +12,7 @@ nest_asyncio.apply()
 TOKEN = ["7348893495:AAEyPcdCEhgZPI8FmKNBlgAQjMVj-na0fhA","8125453394:AAGx4bC6ZRgKXdSXwm_VgbH1FLoRr8YBdo4"]  
 
 MOVIE_DB = "movies.json"  
-ADMIN_ID = [6221923358]  
+ADMIN_ID = ["6221923358"]  
 CHANNEL_ID = ["@farzi_show","@pahla_pyarshow","@panchayat_webshow","@movie_realised", "@new_realise_movie_2025"]  
 
 # ✅ Logging setup
